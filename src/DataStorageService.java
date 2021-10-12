@@ -90,4 +90,17 @@ public class DataStorageService {
 		order.addOrderItem(orderItem);
 		JOptionPane.showMessageDialog(null, "Movie has been ordered.");
 	}
+	
+	public List<Artist> getArtists() {
+		return artistList;
+	}
+	
+	public void updateArtist(String originalName, String updatedName) {
+		for(int i = 0; i < artistList.size(); i++) {
+			if(artistList.get(i).name.contains(originalName)) {
+				artistList.get(i).name = updatedName;
+			}
+		}
+		System.out.println("Successfully updated " + originalName + " to " + updatedName);
+	}
 }

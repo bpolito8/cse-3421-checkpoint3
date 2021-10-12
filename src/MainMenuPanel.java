@@ -43,6 +43,15 @@ public class MainMenuPanel extends JPanel {
 		});
 		add(b2);
 		
+		JButton b6=new JButton("Edit Artist");//creating instance of JButton  
+		b6.setBounds(100,0,100, 50);//x axis, y axis, width, height  
+		b6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				root.switchPanels(new EditRecordPanel(root));
+			}
+		});
+		add(b6);
+		
 		JButton b3=new JButton("Add order");//creating instance of JButton  
 		b3.setBounds(200,0,100, 50);//x axis, y axis, width, height  
 		b3.addActionListener(new ActionListener() {

@@ -37,14 +37,8 @@ public class MainFrame extends JFrame {
 		GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
 		
-		JPanel artistSearchPanel = new ArtistSearchPanel();
-		JPanel addRecordPanel = new AddRecordPanel();
-		
 		
 		contentPane = new JPanel();
-//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-//		setContentPane(contentPane);
-//		contentPane.setLayout(null);
 		
 		layeredPane = new JLayeredPane();
 		JPanel mainMenuPanel = new MainMenuPanel(this);
@@ -67,8 +61,6 @@ public class MainFrame extends JFrame {
 		add(contentPane, gbc);
 		layeredPane.setVisible(true);
 		contentPane.setVisible(true);
-		
-		
-		
+
 	}
 }

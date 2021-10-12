@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -26,33 +27,57 @@ public class AddRecordPanel extends JPanel {
 	protected void initializeComponents() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
+
 		JTextField input = new JTextField(20);
 		JTextField albumName = new JTextField(20);
 		JTextField beatsPerMinute = new JTextField(20);
-		add(input, gbc);
-		
-		Object[][] rowData = {{"test"},{"test2"}};
-		Object[] columnNames = {"Name"};
-		
-		
+		JLabel bpmLabel = new JLabel("Beats per minute");
+		JLabel albumLabel = new JLabel("Album Name");
 		JComboBox combobox = new JComboBox(new Object[]{"Artist", "Track"});
 		combobox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent event) {
 				if (combobox.getSelectedItem() == "Track") {
 					System.out.println("Track selected");
+			        gbc.gridx = 1;
+			        gbc.gridy = 2;
+					add(albumLabel, gbc);
+			        gbc.gridx = 1;
+			        gbc.gridy = 3;
 					add(albumName, gbc);
+			        gbc.gridx = 1;
+			        gbc.gridy = 4;
+					add(bpmLabel, gbc);
+			        gbc.gridx = 1;
+			        gbc.gridy = 5;
 					add(beatsPerMinute, gbc);
 				} else if (combobox.getSelectedItem() == "Artist") {
 					System.out.println("Artist selected");
+					remove(bpmLabel);
+					remove(albumLabel);
 					remove(albumName);
 					remove(beatsPerMinute);
 				}
 				revalidate();
 			}
 		});
-
+        gbc.gridx = 0;
+        gbc.gridy = 0;
 		add(combobox, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+		add(new JLabel("Name"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+		add(input, gbc);
+        
+
+		
+		
+		Object[][] rowData = {{"test"},{"test2"}};
+		Object[] columnNames = {"Name"};
+		
+		
+
 		
 		JButton button = new JButton("Add");//creating instance of JButton  
 		button.setBounds(130,100,100, 100);//x axis, y axis, width, height  
@@ -67,6 +92,8 @@ public class AddRecordPanel extends JPanel {
 				
 			}
 		});
+        gbc.gridx = 2;
+        gbc.gridy = 0;
 		add(button, gbc);
 	}
 }
