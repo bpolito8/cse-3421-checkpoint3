@@ -42,4 +42,14 @@ public class DataStorageService {
 		}
 		return results;
 	}
+	
+	public void addNewArtist(String artistName) {
+		Artist newArtist = new Artist(artistName);
+		artistList.add(newArtist);
+	}
+	
+	public void addNewTrack(String trackName, String albumName, int beatsPerMinute) {
+		Track newTrack = new Track(trackName, albumName, beatsPerMinute);
+		trackList.add(newTrack);
+	}
 }
