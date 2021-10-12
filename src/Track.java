@@ -1,5 +1,5 @@
 
-public class Track {
+public class Track extends Media {
 	String mediaName;
 	String albumName;
 	int beatsPerMinute;

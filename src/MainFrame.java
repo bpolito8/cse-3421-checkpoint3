@@ -1,4 +1,6 @@
 import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -6,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -17,7 +20,7 @@ public class MainFrame extends JFrame {
 		initComponents();
 		
         setSize(600, 480);
-        setLocationRelativeTo(null);
+        //setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setVisible(true);//making the frame visible  
@@ -30,42 +33,38 @@ public class MainFrame extends JFrame {
 	}
 	
 	protected void initComponents() {
+		setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+		
 		JPanel artistSearchPanel = new ArtistSearchPanel();
 		JPanel addRecordPanel = new AddRecordPanel();
 		
-		JButton b=new JButton("Search");//creating instance of JButton  
-		b.setBounds(260,100,100, 100);//x axis, y axis, width, height  
-		b.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				switchPanels(artistSearchPanel);
-			}
-		});
-		add(b);
-		
-		JButton b2=new JButton("Add test");//creating instance of JButton  
-		b2.setBounds(130,100,100, 100);//x axis, y axis, width, height  
-		b2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				switchPanels(addRecordPanel);
-			}
-		});
-		add(b2);
 		
 		contentPane = new JPanel();
+//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+//		setContentPane(contentPane);
+//		contentPane.setLayout(null);
+		
 		layeredPane = new JLayeredPane();
 		JPanel mainMenuPanel = new MainMenuPanel(this);
+		mainMenuPanel.setBounds(0, 200, 600, 280);
 		
-		layeredPane.setBounds(0, 200, 600, 480);
+		layeredPane.setBounds(0, 200, 600, 280);
 		layeredPane.setLayout(new CardLayout(0, 0));
-		layeredPane.add(mainMenuPanel);
+		layeredPane.add(new JPanel());
 		//mainMenuPanel.add(layeredPane)
 		
-		contentPane.setBounds(0, 200, 600, 480);
+		contentPane.setBounds(0, 200, 600, 280);
 		contentPane.add(layeredPane);
 		
-		add(contentPane);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		add(mainMenuPanel, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		add(contentPane, gbc);
 		layeredPane.setVisible(true);
 		contentPane.setVisible(true);
 		

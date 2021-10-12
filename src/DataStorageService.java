@@ -1,11 +1,15 @@
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 public class DataStorageService {
 	private static DataStorageService service = new DataStorageService();
 	List<Artist_Track> artistTrackList;
 	List<Track> trackList;
 	List<Artist> artistList;
+	List<Movie> movieList;
 	
 	private DataStorageService() {
 		// add dummy data
@@ -23,6 +27,11 @@ public class DataStorageService {
 		
 		artistTrackList = new ArrayList<Artist_Track>();
 		artistTrackList.add(new Artist_Track(artistList.get(0), trackList.get(0)));
+		
+		movieList = new ArrayList<Movie>();
+		movieList.add(new Movie("The Matrix"));
+		movieList.add(new Movie("Titanic"));
+		movieList.add(new Movie("Pulp Fiction"));
 	}
 	
 	public static DataStorageService getInstance() {
@@ -69,5 +78,16 @@ public class DataStorageService {
 			}
 		}
 		return results;
+	}
+	
+	public List<Movie> getMovies(){
+		return movieList;
+	}
+	
+	public void orderMovie(Media media, int quantity, double price) {
+		OrderItem orderItem = new OrderItem(media, quantity, price);
+		Order order = new Order(new Date());
+		order.addOrderItem(orderItem);
+		JOptionPane.showMessageDialog(null, "Movie has been ordered.");
 	}
 }

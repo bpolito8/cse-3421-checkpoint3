@@ -1,4 +1,6 @@
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +11,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
@@ -29,11 +32,22 @@ public class ArtistSearchPanel extends JPanel {
 	
 	@SuppressWarnings("unchecked")
 	protected void initializeComponents() {
+		setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+        //gbc.gridwidth = GridBagConstraints.REMAINDER;
+		
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+		add(new JLabel("Name"), gbc);
+		
 		JTextField input = new JTextField(20);
 		input.setBounds(130,100,100, 100);//x axis, y axis, width, height
-		add(input);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+		add(input, gbc);
 		
-		TableModel tableModel = new DefaultTableModel(0, 1);
+		DefaultTableModel tableModel = new DefaultTableModel(0, 1);
+		tableModel.setColumnIdentifiers(new Object[] {"Name"});
 		JTable table = new JTable(tableModel);
 		input.setBounds(130,300,100, 100);//x axis, y axis, width, height
 		
@@ -47,7 +61,12 @@ public class ArtistSearchPanel extends JPanel {
 //			          
 //			}
 //		});
-		add(combobox);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+		add(new JLabel("Searching for"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+		add(combobox, gbc);
 		
 		JButton button = new JButton("Search");//creating instance of JButton  
 		button.setBounds(130,100,100, 100);//x axis, y axis, width, height  
@@ -71,8 +90,14 @@ public class ArtistSearchPanel extends JPanel {
 
 			}
 		});
-		add(button);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+		add(button, gbc);
 
-		add(table);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+		add(table, gbc);
 	}
 }
