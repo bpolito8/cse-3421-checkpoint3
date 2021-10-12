@@ -13,8 +13,8 @@ public class Main {
 		
 		DataStorageService service = DataStorageService.getInstance();
 		
-		System.out.println("Tracks with artists containing 'Rolling': " + service.searchTracksByArtist("Rolling").get(0).mediaName);
-		System.out.println("Tracks with titles containing 'Gimme': " + service.searchTracksByName("Gimme").get(0).mediaName);
+		System.out.println("Tracks with artists containing 'e': " + service.searchArtistsByName("e").get(1).name);
+		System.out.println("Tracks with titles containing 'e': " + service.searchTracksByName("e").get(1).mediaName);
 	}
 
 }

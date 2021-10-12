@@ -58,13 +58,12 @@ public class AddRecordPanel extends JPanel {
 		button.setBounds(130,100,100, 100);//x axis, y axis, width, height  
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (button.getModel().isPressed()) {
+				
 					if (combobox.getSelectedItem() == "Artist") {
 						service.addNewArtist(input.getText());
 					} else if (combobox.getSelectedItem() == "Track") {
 						service.addNewTrack(input.getText(), albumName.getText(), Integer.parseInt(beatsPerMinute.getText()));
 					}
-				}
 				
 			}
 		});

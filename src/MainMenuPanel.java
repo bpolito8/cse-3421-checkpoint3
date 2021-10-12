@@ -20,29 +20,7 @@ public class MainMenuPanel extends JPanel {
 	}
 	
 	protected void initComponents() {
-		JPanel artistSearchPanel = new ArtistSearchPanel();
-		JPanel addRecordPanel = new AddRecordPanel();
-		
-		JButton b=new JButton("Search");//creating instance of JButton  
-		b.setBounds(130,100,100, 100);//x axis, y axis, width, height  
-		b.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				root.switchPanels(artistSearchPanel);
-			}
-		});
-		add(b);
-		
-		JButton b2=new JButton("Add test");//creating instance of JButton  
-		b2.setBounds(130,100,100, 100);//x axis, y axis, width, height  
-		b2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				root.switchPanels(addRecordPanel);
-			}
-		});
-		add(b2);
-		
+
 		           
 	}
 }

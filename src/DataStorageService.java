@@ -11,9 +11,15 @@ public class DataStorageService {
 		// add dummy data
 		trackList = new ArrayList<Track>();
 		trackList.add(new Track("Gimme Shelter", "Let It Bleed", 100));
+		trackList.add(new Track("Paint it Black", "Aftermath", 100));
+		trackList.add(new Track("Seven Nation Army", "Elephant", 100));
+		
 		
 		artistList = new ArrayList<Artist>();
 		artistList.add(new Artist("The Rolling Stones"));
+		artistList.add(new Artist("Led Zeppelin"));
+		artistList.add(new Artist("Pink Floyd"));
+		artistList.add(new Artist("The White Stripes"));
 		
 		artistTrackList = new ArrayList<Artist_Track>();
 		artistTrackList.add(new Artist_Track(artistList.get(0), trackList.get(0)));
@@ -51,5 +57,17 @@ public class DataStorageService {
 	public void addNewTrack(String trackName, String albumName, int beatsPerMinute) {
 		Track newTrack = new Track(trackName, albumName, beatsPerMinute);
 		trackList.add(newTrack);
+		System.out.println("Artist added");
+		
+	}
+	
+	public List<Artist> searchArtistsByName(String artistName){
+		List<Artist> results = new ArrayList<Artist>();
+		for(int i = 0; i < artistList.size(); i++) {
+			if(artistList.get(i).name.contains(artistName)) {
+				results.add(artistList.get(i));
+			}
+		}
+		return results;
 	}
 }
