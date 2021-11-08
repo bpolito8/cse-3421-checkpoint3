@@ -12,6 +12,9 @@ import javax.swing.JOptionPane;
 public class DataStorageService {
 	
 	private String GET_MOVIES = "SELECT * FROM Movie";
+	private String GET_ARTIST_BY_NAME = "SELECT * FROM Creator WHERE Name LIKE ?;";
+	private String GET_TRACK_BY_NAME = "SELECT * FROM Track WHERE MediaName LIKE ?;";
+	private String GET_ARTISTS = "SELECT * FROM Creator";
 	
 	private static DataStorageService service = new DataStorageService();
 	List<Artist_Track> artistTrackList;
@@ -57,13 +60,20 @@ public class DataStorageService {
 	}
 	
 	public List<Track> searchTracksByName(String trackName){
-		List<Track> results = new ArrayList<Track>();
-		for(int i = 0; i < trackList.size(); i++) {
-			if(trackList.get(i).mediaName.contains(trackName)) {
-				results.add(trackList.get(i));
+		trackName = "%" + trackName + "%";
+    	Connection conn = DatabaseManager.initializeDB();
+    	List<Track> trackList = new ArrayList<Track>();
+    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_TRACK_BY_NAME, new String[] {trackName});
+    	try {
+			while (rs.next()) {
+				trackList.add(new Track(rs.getString(1), rs.getString(2), rs.getInt(3)));
+				System.out.println(rs.getString(1));
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return results;
+    	return trackList;
 	}
 	
 	public void addNewArtist(String artistName) {
@@ -79,19 +89,26 @@ public class DataStorageService {
 	}
 	
 	public List<Artist> searchArtistsByName(String artistName){
-		List<Artist> results = new ArrayList<Artist>();
-		for(int i = 0; i < artistList.size(); i++) {
-			if(artistList.get(i).name.contains(artistName)) {
-				results.add(artistList.get(i));
+		artistName = "%" + artistName + "%";
+    	Connection conn = DatabaseManager.initializeDB();
+    	List<Artist> artistList = new ArrayList<Artist>();
+    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_ARTIST_BY_NAME, new String[] {artistName});
+    	try {
+			while (rs.next()) {
+				artistList.add(new Artist(rs.getString(1)));
+				System.out.println(rs.getString(1));
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return results;
+    	return artistList;
 	}
 	
 	public List<Movie> getMovies(){
     	Connection conn = DatabaseManager.initializeDB();
     	List<Movie> movieList = new ArrayList<Movie>();
-    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_MOVIES, new String[0]);
+    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_MOVIES, new String[] {});
     	try {
 			while (rs.next()) {
 				movieList.add(new Movie(rs.getString(1)));
@@ -111,7 +128,19 @@ public class DataStorageService {
 	}
 	
 	public List<Artist> getArtists() {
-		return artistList;
+    	Connection conn = DatabaseManager.initializeDB();
+    	List<Artist> artistList = new ArrayList<Artist>();
+    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_ARTISTS, new String[] {});
+    	try {
+			while (rs.next()) {
+				artistList.add(new Artist(rs.getString(1)));
+				System.out.println(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return artistList;
 	}
 	
 	public void updateArtist(String originalName, String updatedName) {

@@ -115,7 +115,8 @@ public class DatabaseManager {
         try {
         	PreparedStatement stmt = conn.prepareStatement(sql);
         	for(int i = 0; i < params.length; i++) {
-        		stmt.setString(i+1, params[i]);
+        		String val = params[i];
+        		stmt.setString(i+1, val);
         	}
         	return stmt.executeQuery();
 
@@ -124,63 +125,4 @@ public class DatabaseManager {
         }
         return null;
     }
-
-    
-//    public static void main(String[] args) {
-//    	System.out.println("This is a new run");
-//    	
-//    	Connection conn = initializeDB(DATABASE);
-//    	sqlQuery(conn, selectAlbumStatement);
-//    	    	
-//    	System.out.println("*********************************************************************");
-//    	System.out.println("Part 5 - Add another query");
-//    	
-//    	System.out.println("Choose a query, 1 to get albums or 2 to get media by creator:");
-//    	Scanner sc = new Scanner(System.in);
-//    	String input = sc.next();
-//    	if(input.equals("1")) {
-//    		sqlQuery(conn, selectAlbumStatement);
-//    	} else if (input.equals("2")) {
-//    		sqlQueryTwo(conn, selectMediaByCreatorStatement, "John Lasseter");
-//    	}
-//    	
-//    	System.out.println("*********************************************************************");
-//    	System.out.println("Part 6 - Add other queries - Use PreparedStatements");
-//    	
-//    	System.out.println("Choose a query, 1 to get albums or 2 to get media by creator, 3 to add a creator:");
-//    	input = sc.next();
-//    	if(input.equals("1")) {
-//    		sqlQuery(conn, selectAlbumStatement);
-//    	} else if (input.equals("2")) {
-//    		sqlQueryTwo(conn, selectMediaByCreatorStatement, "John Lasseter");
-//    	} else {
-//    		sqlQueryTwo(conn, insertCreatorStatement, "Bryce Polito");
-//    	}
-//    	
-//    	
-//    	/* finally best approach
-//		finally{
-//		   
-//			/* From JSE7 onwards the try-with-resources statement is introduced. 
-//			 * The resources in the try block will be closed automatically after the use,
-//			 * at the end of the try block
-//			 *  close JDBC objects
-//			 * If not, use the following block:
-//		   try {
-//		      if(rs!=null) rs.close();
-//		   } catch (SQLException se) {
-//		      se.printStackTrace();
-//		   }
-//		   try {
-//		      if(stmt !=null) st.close();
-//		   } catch (SQLException se) {
-//		      se.printStackTrace();
-//		   }
-//		   try {
-//		      if(conn !=null) con.close();
-//		   } catch (SQLException se) {
-//		      se.printStackTrace();
-//		   }
-//		}*/
-//    }
 }
