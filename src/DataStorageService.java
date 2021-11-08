@@ -1,15 +1,23 @@
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
+
+
 public class DataStorageService {
+	
+	private String GET_MOVIES = "SELECT * FROM Movie";
+	
 	private static DataStorageService service = new DataStorageService();
 	List<Artist_Track> artistTrackList;
 	List<Track> trackList;
 	List<Artist> artistList;
-	List<Movie> movieList;
+	//List<Movie> movieList;
 	
 	private DataStorageService() {
 		// add dummy data
@@ -28,10 +36,10 @@ public class DataStorageService {
 		artistTrackList = new ArrayList<Artist_Track>();
 		artistTrackList.add(new Artist_Track(artistList.get(0), trackList.get(0)));
 		
-		movieList = new ArrayList<Movie>();
-		movieList.add(new Movie("The Matrix"));
-		movieList.add(new Movie("Titanic"));
-		movieList.add(new Movie("Pulp Fiction"));
+//		movieList = new ArrayList<Movie>();
+//		movieList.add(new Movie("The Matrix"));
+//		movieList.add(new Movie("Titanic"));
+//		movieList.add(new Movie("Pulp Fiction"));
 	}
 	
 	public static DataStorageService getInstance() {
@@ -81,7 +89,18 @@ public class DataStorageService {
 	}
 	
 	public List<Movie> getMovies(){
-		return movieList;
+    	Connection conn = DatabaseManager.initializeDB();
+    	List<Movie> movieList = new ArrayList<Movie>();
+    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_MOVIES, new String[0]);
+    	try {
+			while (rs.next()) {
+				movieList.add(new Movie(rs.getString(1)));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return movieList;
 	}
 	
 	public void orderMovie(Media media, int quantity, double price) {
