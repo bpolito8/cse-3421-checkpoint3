@@ -43,16 +43,7 @@ public class MainMenuPanel extends JPanel {
 		});
 		add(b2);
 		
-		JButton b6=new JButton("Edit Artist");//creating instance of JButton  
-		b6.setBounds(100,0,100, 50);//x axis, y axis, width, height  
-		b6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				root.switchPanels(new EditRecordPanel(root));
-			}
-		});
-		add(b6);
-		
-		JButton b3=new JButton("Add order");//creating instance of JButton  
+		JButton b3=new JButton("Add Order");//creating instance of JButton  
 		b3.setBounds(200,0,100, 50);//x axis, y axis, width, height  
 		b3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -61,11 +52,20 @@ public class MainMenuPanel extends JPanel {
 		});
 		add(b3);
 		
-		JButton b5=new JButton("Useful reports");//creating instance of JButton  
+		JButton b6=new JButton("Edit Record");//creating instance of JButton  
+		b6.setBounds(100,0,100, 50);//x axis, y axis, width, height  
+		b6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				root.switchPanels(new EditRecordPanel(root));
+			}
+		});
+		add(b6);
+		
+		JButton b5=new JButton("Useful Reports");//creating instance of JButton  
 		b5.setBounds(400,0,100, 50);//x axis, y axis, width, height  
 		b5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				root.switchPanels(new UsefulReportsPanel());
+				root.switchPanels(new UsefulReportsPanel(root));
 			}
 		});
 		add(b5);

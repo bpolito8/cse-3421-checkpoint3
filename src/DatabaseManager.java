@@ -1,6 +1,8 @@
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -117,6 +119,46 @@ public class DatabaseManager {
         	for(int i = 0; i < params.length; i++) {
         		String val = params[i];
         		stmt.setString(i+1, val);
+        	}
+        	return stmt.executeQuery();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    /**
+     * Queries the database and prints the results.
+     * 
+     * @param conn a connection object
+     * @param sql a SQL statement that returns rows
+     * This query is written with the Statement class, typically 
+     * used for static SQL SELECT statements
+     * @return 
+     */
+    public static ResultSet sqlQuerySpecialTypes(Connection conn, String sql, String[] params, DataType[] dataTypes){
+        try {
+        	PreparedStatement stmt = conn.prepareStatement(sql);
+        	for(int i = 0; i < params.length; i++) {
+        		String val = params[i];
+        		
+        		switch(dataTypes[i]) {
+        			case STRING:
+        				stmt.setString(i+1, val);
+        				break;
+        			case INT:
+        				stmt.setInt(i+1, Integer.parseInt(val));
+        				break;
+        			case DECIMAL:
+        				stmt.setBigDecimal(i+1, new BigDecimal(val));
+        				break;
+        			case DATE:
+        				stmt.setDate(i+1, Date.valueOf(val));
+        				break;
+        			default:
+        				stmt.setString(i+1, val);
+        		}
         	}
         	return stmt.executeQuery();
 

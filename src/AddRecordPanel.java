@@ -69,16 +69,7 @@ public class AddRecordPanel extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 1;
 		add(input, gbc);
-        
-
-		
-		
-		Object[][] rowData = {{"test"},{"test2"}};
-		Object[] columnNames = {"Name"};
-		
-		
-
-		
+        		
 		JButton button = new JButton("Add");//creating instance of JButton  
 		button.setBounds(130,100,100, 100);//x axis, y axis, width, height  
 		button.addActionListener(new ActionListener() {

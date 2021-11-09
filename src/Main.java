@@ -11,7 +11,7 @@ public class Main {
 		
 		JFrame mainFrame = new MainFrame();
 		
-		DataStorageService service = DataStorageService.getInstance();
+		//DataStorageService service = DataStorageService.getInstance();
 		
 		//System.out.println("Tracks with artists containing 'e': " + service.searchArtistsByName("e").get(1).name);
 		//System.out.println("Tracks with titles containing 'e': " + service.searchTracksByName("e").get(1).mediaName);

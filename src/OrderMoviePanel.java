@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -55,7 +56,7 @@ public class OrderMoviePanel extends JPanel {
 		button.setBounds(130,100,100, 100);//x axis, y axis, width, height  
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				service.orderMovie((Movie)combobox.getSelectedItem(), Integer.parseInt(quantityField.getText()), Double.parseDouble(priceField.getText()));
+				service.orderMovie(((Movie)combobox.getSelectedItem()).name, Integer.parseInt(quantityField.getText()), Double.parseDouble(priceField.getText()), new Date());
 			}
 		});
 		add(button, gbc);
