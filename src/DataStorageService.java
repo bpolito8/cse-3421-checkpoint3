@@ -79,6 +79,8 @@ public class DataStorageService {
 	private String GET_ALL_ORDERS = "SELECT OrderNumber FROM [Order];";
 	private String GET_ORDERITEMS_FOR_ORDER = "SELECT * FROM OrderItem WHERE OrderNumber = ?;";
 	private String ACTIVATE_ORDER_RECEIVED = "INSERT INTO INVENTORYITEM (MediaName, Location) VALUES (?, 'Columbus');";
+	private String DELETE_ORDER = "DELETE FROM [Order] WHERE OrderNumber = ?;";
+	private String DELETE_ORDERITEMS_FOR_ORDER = "DELETE FROM ORDERITEM WHERE OrderNumber = ?";;
 	
 	
 	private static DataStorageService service = new DataStorageService();
@@ -401,5 +403,33 @@ public class DataStorageService {
 			e.printStackTrace();
 		}
     	return orderItems;
+	}
+	
+	public void deleteOrderItems(int orderNum) {
+		Connection conn = DatabaseManager.initializeDB();
+    	PreparedStatement ps;
+    	ResultSet rs;
+    	try {
+			ps = conn.prepareStatement(DELETE_ORDERITEMS_FOR_ORDER);
+			ps.setString(1, String.valueOf(orderNum));
+			rs = ps.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteOrder(int orderNum) {
+		Connection conn = DatabaseManager.initializeDB();
+    	PreparedStatement ps;
+    	ResultSet rs;
+    	try {
+			ps = conn.prepareStatement(DELETE_ORDER);
+			ps.setString(1, String.valueOf(orderNum));
+			rs = ps.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
