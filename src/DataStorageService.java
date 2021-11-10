@@ -29,14 +29,56 @@ public class DataStorageService {
 	private String GET_MAX_CHECKOUT_PATRON = "SELECT FirstName, LastName, Count(*) "
 			+ "FROM LibraryCardHolder as L, LibraryCardHolder_InventoryItem as LCH, InventoryItem as II, Movie as M "
 			+ "WHERE L.CardNumber == LCH.LibraryCardNumber and LCH.InventoryItemNumber == II.ItemID and II.MediaName == M.MediaName GROUP BY FirstName, LastName HAVING Max(M.MediaName);";
-	private String GET_MOST_POPULAR_ACTOR = "";
-	private String GET_MOST_POPULAR_ARTIST = "";
+	private String GET_MOST_POPULAR_ACTOR = "SELECT * " + 
+			"FROM (" + 
+			"    SELECT c.Name, COUNT(lchii.InventoryItemNumber) as CheckoutCount" + 
+			"    FROM Creator c" + 
+			"    LEFT JOIN Media_Creator mc on c.Name = mc.CreatorName" + 
+			"    LEFT JOIN Media m on mc.MediaName = m.Name" + 
+			"    LEFT JOIN InventoryItem ii on m.Name = ii.MediaName" + 
+			"    LEFT JOIN LibraryCardHolder_InventoryItem lchii on ii.ItemId = lchii.InventoryItemNumber" + 
+			"    GROUP BY c.Name" + 
+			")" + 
+			"WHERE CheckoutCount = (SELECT MAX(CheckoutCount)" + 
+			"FROM (" + 
+			"        SELECT COUNT(lchii.InventoryItemNumber) as CheckoutCount" + 
+			"        FROM Creator c\r\n" + 
+			"        LEFT JOIN Media_Creator mc on c.Name = mc.CreatorNam" + 
+			"        LEFT JOIN Media m on mc.MediaName = m.Name" + 
+			"        LEFT JOIN InventoryItem ii on m.Name = ii.MediaName" + 
+			"        LEFT JOIN LibraryCardHolder_InventoryItem lchii on ii.ItemId = lchii.InventoryItemNumber" + 
+			"        GROUP BY c.Name" + 
+			"    )" + 
+			")";
+	private String GET_MOST_POPULAR_ARTIST = "SELECT * " + 
+			"FROM (" + 
+			"    SELECT c.Name, COUNT(lchii.InventoryItemNumber) as CheckoutCount" + 
+			"    FROM Creator c" + 
+			"    LEFT JOIN Media_Creator mc on c.Name = mc.CreatorName" + 
+			"    LEFT JOIN Media m on mc.MediaName = m.Name" + 
+			"    LEFT JOIN InventoryItem ii on m.Name = ii.MediaName" + 
+			"    LEFT JOIN LibraryCardHolder_InventoryItem lchii on ii.ItemId = lchii.InventoryItemNumber" + 
+			"    GROUP BY c.Name" + 
+			")" + 
+			"WHERE CheckoutCount = (SELECT MAX(CheckoutCount)" + 
+			"FROM (" + 
+			"        SELECT COUNT(lchii.InventoryItemNumber) as CheckoutCount" + 
+			"        FROM Creator c\r\n" + 
+			"        LEFT JOIN Media_Creator mc on c.Name = mc.CreatorNam" + 
+			"        LEFT JOIN Media m on mc.MediaName = m.Name" + 
+			"        LEFT JOIN InventoryItem ii on m.Name = ii.MediaName" + 
+			"        LEFT JOIN LibraryCardHolder_InventoryItem lchii on ii.ItemId = lchii.InventoryItemNumber" + 
+			"        GROUP BY c.Name" + 
+			"    )" + 
+			")";
 	private String INSERT_ARTIST = "INSERT INTO Creator VALUES (?);";
 	private String INSERT_TRACK = "INSERT INTO Track VALUES (?, ?, ?);";
 	private String INSERT_ORDER = "INSERT INTO [Order] Values (?, ?)";
 	private String INSERT_ORDERITEM = "INSERT INTO [OrderItem] Values (?, ?, ?, ?)";
 	private String UPDATE_ARTIST = "UPDATE Creator SET Name = ? WHERE Name = ?;";
 	private String GET_ALL_ORDERS = "SELECT * FROM [Order];";
+	private String GET_ORDERITEMS_FOR_ORDER = "SELECT * FROM OrderItem WHERE OrderNumber = ?;";
+	
 	
 	private static DataStorageService service = new DataStorageService();
 	List<Artist_Track> artistTrackList;
@@ -337,5 +379,26 @@ public class DataStorageService {
 			e.printStackTrace();
 		}
     	return orders;
+	}
+	
+	public List<OrderItem> getOrderItemByOrderNumber(int orderNum) {
+		Connection conn = DatabaseManager.initializeDB();
+    	List<OrderItem> orderItems = new ArrayList<OrderItem>();
+    	PreparedStatement ps;
+    	ResultSet rs;
+    	try {
+			ps = conn.prepareStatement(GET_ORDERITEMS_FOR_ORDER);
+			ps.setString(1, String.valueOf(orderNum));
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				Date eta = new Date(rs.getDate(2).getTime());
+				orderItems.add(new OrderItem(rs.getString(1), rs.getInt(3), rs.getDouble(2)));
+				System.out.println(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return orderItems;
 	}
 }

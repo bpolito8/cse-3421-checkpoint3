@@ -1,10 +1,10 @@
 
 public class OrderItem {
-	Media media;
+	String mediaName;
 	int quantity;
 	double pricePerItem;
-	public OrderItem(Media media, int quantity, double pricePerItem) {
-		this.media = media;
+	public OrderItem(String mediaName, int quantity, double pricePerItem) {
+		this.mediaName = mediaName;
 		this.quantity = quantity;
 		this.pricePerItem = pricePerItem;
 	}
