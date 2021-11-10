@@ -1,6 +1,8 @@
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -109,12 +111,32 @@ public class DataStorageService {
 	
 	public void addNewArtist(String artistName) {
 		Connection conn = DatabaseManager.initializeDB();
-		DatabaseManager.sqlQuery(conn, INSERT_ARTIST, new String[] {artistName});
+		PreparedStatement st;
+		try {
+			st = conn.prepareStatement(INSERT_ARTIST);
+			st.setString(1, artistName);
+			st.executeUpdate();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 	}
 	
-	public void addNewTrack(String trackName, String albumName, int beatsPerMinute) {
+	public void addNewTrack(String trackName, String albumName, int beatsPerMinute)  {
 		Connection conn = DatabaseManager.initializeDB();
-		DatabaseManager.sqlQuery(conn, INSERT_TRACK, new String[] {trackName, albumName, String.valueOf(beatsPerMinute)});
+		PreparedStatement ps;
+		try {
+			ps = conn.prepareStatement(INSERT_TRACK);
+			ps.setString(1, trackName);
+			ps.setString(2, albumName);
+			ps.setInt(3, beatsPerMinute);
+			ps.executeUpdate();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		
 	}
 	
@@ -153,13 +175,26 @@ public class DataStorageService {
 	public void orderMovie(String mediaName, int quantity, double price, Date estimatedArrival) {
 		Connection conn = DatabaseManager.initializeDB();
 		int orderNum = getOrderNumber();
-		DatabaseManager.sqlQuerySpecialTypes(conn, INSERT_ORDER, 
-				new String[] {String.valueOf(orderNum), String.valueOf(estimatedArrival)}, 
-				new DataType[] {DataType.INT, DataType.DATE});
-		DatabaseManager.sqlQuerySpecialTypes(conn, INSERT_ORDERITEM, 
-				new String[] {mediaName, String.valueOf(price), String.valueOf(quantity), String.valueOf(orderNum)}, 
-				new DataType[] {DataType.STRING, DataType.DECIMAL, DataType.INT, DataType.INT});
-		JOptionPane.showMessageDialog(null, "Movie has been ordered.");
+		PreparedStatement ps1;
+		PreparedStatement ps2;
+		try {
+			ps1 = conn.prepareStatement(INSERT_ORDER);
+			ps1.setInt(1, orderNum);
+			ps1.setDate(2, new java.sql.Date(estimatedArrival.getTime()));
+			ps1.executeUpdate();
+			
+			ps2 = conn.prepareStatement(INSERT_ORDERITEM);
+			ps2.setString(1, mediaName);
+			ps2.setDouble(2, price);
+			ps2.setInt(3, quantity);
+			ps2.setInt(4, orderNum);
+			ps2.executeUpdate();
+			JOptionPane.showMessageDialog(null, "Movie has been ordered.");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public List<Artist> getArtists() {
@@ -180,6 +215,18 @@ public class DataStorageService {
 	
 	public void updateArtist(String originalName, String updatedName) {
 		Connection conn = DatabaseManager.initializeDB();
+		PreparedStatement ps1;
+		try {
+			ps1 = conn.prepareStatement(UPDATE_ARTIST);
+			ps1.setString(1, updatedName);
+			ps1.setString(2, originalName);
+			ps1.executeUpdate();
+			
+			JOptionPane.showMessageDialog(null, "Updated artist successfully.");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		DatabaseManager.sqlQuery(conn, UPDATE_ARTIST, new String[] {updatedName, originalName});
 	}
 	
