@@ -39,12 +39,27 @@ public class UsefulReportsPanel extends JPanel {
 		add(b2, gbc);
 		
 		JButton b3 = new JButton("Most popular actor");
+		b3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				root.switchPanels(new MostPopularActorPanel());
+			}
+		});
 		add(b3, gbc);
 		
 		JButton b4 = new JButton("Most listened-to artist");
+		b4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				root.switchPanels(new MostListenedArtistPanel());
+			}
+		});
 		add(b4, gbc);
 		
 		JButton b5 = new JButton("Patron who has checked out the most videos");
+		b5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				root.switchPanels(new PatronWithMostVideosPanel());
+			}
+		});
 		add(b5, gbc);
 	}
 }

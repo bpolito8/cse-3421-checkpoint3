@@ -27,8 +27,8 @@ public class DataStorageService {
 			+ "WHERE L.CardNumber == LCH.LibraryCardNumber and LCH.InventoryItemNumber == II.ItemID "
 			+ "and II.MediaName == A.MediaName and LCH.LibraryCardNumber = ?";
 	private String GET_MAX_CHECKOUT_PATRON = "SELECT FirstName, LastName, Count(*) "
-			+ "FROM LibraryCardHolder as L, LibraryCardHolder_InventoryItem as LCH, Inventory Item as II, Movie as M "
-			+ "WHERE L.CardNumber == LCH.LibraryCardNumber and LCH.InventoryItem == II.ItemID and II.MediaName 	== M.MediaName HAVING Max(M.MediaName) ";
+			+ "FROM LibraryCardHolder as L, LibraryCardHolder_InventoryItem as LCH, InventoryItem as II, Movie as M "
+			+ "WHERE L.CardNumber == LCH.LibraryCardNumber and LCH.InventoryItemNumber == II.ItemID and II.MediaName == M.MediaName GROUP BY FirstName, LastName HAVING Max(M.MediaName);";
 	private String GET_MOST_POPULAR_ACTOR = "";
 	private String GET_MOST_POPULAR_ARTIST = "";
 	private String INSERT_ARTIST = "INSERT INTO Creator VALUES (?);";
@@ -36,6 +36,7 @@ public class DataStorageService {
 	private String INSERT_ORDER = "INSERT INTO [Order] Values (?, ?)";
 	private String INSERT_ORDERITEM = "INSERT INTO [OrderItem] Values (?, ?, ?, ?)";
 	private String UPDATE_ARTIST = "UPDATE Creator SET Name = ? WHERE Name = ?;";
+	private String GET_ALL_ORDERS = "SELECT * FROM Order;";
 	
 	private static DataStorageService service = new DataStorageService();
 	List<Artist_Track> artistTrackList;
@@ -110,6 +111,7 @@ public class DataStorageService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
     	return trackList;
 	}
 	
@@ -260,13 +262,16 @@ public class DataStorageService {
     	return numCheckouts;
 	}
 	
-	public Artist getMostPopularArtist() {
+	public List<Artist> getMostPopularArtist() {
     	Connection conn = DatabaseManager.initializeDB();
-    	Artist mostPopularArtist = null;
-    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_MOST_POPULAR_ARTIST, new String[] {});
+    	List<Artist> mostPopularArtist = new ArrayList<Artist>();
+    	PreparedStatement ps;
+    	ResultSet rs;
     	try {
+			ps = conn.prepareStatement(GET_MOST_POPULAR_ARTIST);
+			rs = ps.executeQuery();
 			while (rs.next()) {
-				mostPopularArtist = new Artist(rs.getString(1));
+				mostPopularArtist.add( new Artist(rs.getString(1)));
 				System.out.println(rs.getString(1));
 			}
 		} catch (SQLException e) {
@@ -276,29 +281,35 @@ public class DataStorageService {
     	return mostPopularArtist;
 	}
 	
-	public Artist getMostPopularActor() {
+	public List<Artist> getMostPopularActor() {
     	Connection conn = DatabaseManager.initializeDB();
-    	Artist mostPopularArtist = null;
-    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_MOST_POPULAR_ACTOR, new String[] {});
+    	List<Artist> mostPopularActor = new ArrayList<Artist>();
+    	PreparedStatement ps;
+    	ResultSet rs;
     	try {
+			ps = conn.prepareStatement(GET_MOST_POPULAR_ACTOR);
+			rs = ps.executeQuery();
 			while (rs.next()) {
-				mostPopularArtist = new Artist(rs.getString(1));
+				mostPopularActor.add( new Artist(rs.getString(1)));
 				System.out.println(rs.getString(1));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	return mostPopularArtist;
+    	return mostPopularActor;
 	}
 	
-	public LibraryCardHolder getPatronWhoCheckedOutMostVideos() {
+	public List<LibraryCardHolder> getPatronWhoCheckedOutMostVideos() {
     	Connection conn = DatabaseManager.initializeDB();
-    	LibraryCardHolder patron = null;
-    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_MAX_CHECKOUT_PATRON, new String[] {});
+    	List<LibraryCardHolder> patron = new ArrayList<LibraryCardHolder>();
+    	PreparedStatement ps;
+    	ResultSet rs;
     	try {
+			ps = conn.prepareStatement(GET_MAX_CHECKOUT_PATRON);
+			rs = ps.executeQuery();
 			while (rs.next()) {
-				patron = new LibraryCardHolder(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				patron.add(new LibraryCardHolder(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
 				System.out.println(rs.getString(1));
 			}
 		} catch (SQLException e) {
@@ -306,5 +317,25 @@ public class DataStorageService {
 			e.printStackTrace();
 		}
     	return patron;
+	}
+	
+	public List<Order> getAllOrders() {
+		Connection conn = DatabaseManager.initializeDB();
+    	List<Order> orders = new ArrayList<Order>();
+    	PreparedStatement ps;
+    	ResultSet rs;
+    	try {
+			ps = conn.prepareStatement(GET_ALL_ORDERS);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				Date eta = new Date(rs.getDate(2).getTime());
+				orders.add(new Order(rs.getInt(1), eta));
+				System.out.println(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return orders;
 	}
 }
