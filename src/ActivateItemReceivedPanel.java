@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -33,7 +34,7 @@ public class ActivateItemReceivedPanel extends JPanel {
 		((DefaultTableModel) tableModel).setRowCount(0);
 		List<Order> results = service.getAllOrders();
 		for(int i = 0; i < results.size(); i++) {			
-			((DefaultTableModel) tableModel).addRow(new Object[]{ String.valueOf(results.get(i).orderNumber) + " - " + results.get(i).arrivalDate.toString()});
+			((DefaultTableModel) tableModel).addRow(new Object[]{ String.valueOf(results.get(i).orderNumber)});
 		}
 		table.addMouseListener(new MouseAdapter() {
 		    public void mousePressed(MouseEvent mouseEvent) {
@@ -41,7 +42,16 @@ public class ActivateItemReceivedPanel extends JPanel {
 		    	System.out.println(selectedCellValue);
 		        JTable table =(JTable) mouseEvent.getSource();
 		        if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
-		        	// execute the queries based on selectedCellValue
+		        	int orderNum = Integer.parseInt(selectedCellValue);
+		        	List<OrderItem> orderItems = service.getOrderItemByOrderNumber(orderNum);
+		        	for(int i = 0; i < orderItems.size(); i++) {
+		        		for(int j = 0; j < orderItems.get(i).quantity; j++) {
+		        			service.activateOrderReceived(orderItems.get(i).mediaName);
+		        		}
+		        	}
+		        	service.deleteOrderItems(orderNum);
+		        	service.deleteOrder(orderNum);
+		        	JOptionPane.showMessageDialog(null, "Activated items successfully.");
 		        }
 		    }
 		});

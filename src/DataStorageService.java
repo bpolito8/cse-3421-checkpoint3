@@ -412,7 +412,7 @@ public class DataStorageService {
     	try {
 			ps = conn.prepareStatement(DELETE_ORDERITEMS_FOR_ORDER);
 			ps.setString(1, String.valueOf(orderNum));
-			rs = ps.executeQuery();
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -426,7 +426,21 @@ public class DataStorageService {
     	try {
 			ps = conn.prepareStatement(DELETE_ORDER);
 			ps.setString(1, String.valueOf(orderNum));
-			rs = ps.executeQuery();
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void activateOrderReceived(String mediaName) {
+		Connection conn = DatabaseManager.initializeDB();
+    	PreparedStatement ps;
+    	ResultSet rs;
+    	try {
+			ps = conn.prepareStatement(ACTIVATE_ORDER_RECEIVED);
+			ps.setString(1, mediaName);
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
