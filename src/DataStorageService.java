@@ -36,7 +36,7 @@ public class DataStorageService {
 	private String INSERT_ORDER = "INSERT INTO [Order] Values (?, ?)";
 	private String INSERT_ORDERITEM = "INSERT INTO [OrderItem] Values (?, ?, ?, ?)";
 	private String UPDATE_ARTIST = "UPDATE Creator SET Name = ? WHERE Name = ?;";
-	private String GET_ALL_ORDERS = "SELECT * FROM Order;";
+	private String GET_ALL_ORDERS = "SELECT * FROM [Order];";
 	
 	private static DataStorageService service = new DataStorageService();
 	List<Artist_Track> artistTrackList;

@@ -43,11 +43,11 @@ public class MainMenuPanel extends JPanel {
 		});
 		add(b2);
 		
-		JButton b3=new JButton("Add Order");//creating instance of JButton  
+		JButton b3=new JButton("Order Items");//creating instance of JButton  
 		b3.setBounds(200,0,100, 50);//x axis, y axis, width, height  
 		b3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				root.switchPanels(new OrderMoviePanel());
+				root.switchPanels(new OrderItemsPanel(root));
 			}
 		});
 		add(b3);

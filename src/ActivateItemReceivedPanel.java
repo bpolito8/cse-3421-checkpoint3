@@ -13,9 +13,7 @@ import javax.swing.table.TableColumnModel;
 
 public class ActivateItemReceivedPanel extends JPanel {
 	DataStorageService service;
-	MainFrame root;
-	public ActivateItemReceivedPanel(MainFrame root) {
-		this.root = root;
+	public ActivateItemReceivedPanel() {
 		service = DataStorageService.getInstance();
 		initializeComponents();
 		setVisible(true);
