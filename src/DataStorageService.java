@@ -43,7 +43,7 @@ public class DataStorageService {
 			"FROM (" + 
 			"        SELECT COUNT(lchii.InventoryItemNumber) as CheckoutCount" + 
 			"        FROM Creator c\r\n" + 
-			"        LEFT JOIN Media_Creator mc on c.Name = mc.CreatorNam" + 
+			"        LEFT JOIN Media_Creator mc on c.Name = mc.CreatorName" + 
 			"        LEFT JOIN Media m on mc.MediaName = m.Name" + 
 			"        LEFT JOIN InventoryItem ii on m.Name = ii.MediaName" + 
 			"        LEFT JOIN LibraryCardHolder_InventoryItem lchii on ii.ItemId = lchii.InventoryItemNumber" + 
@@ -64,7 +64,7 @@ public class DataStorageService {
 			"FROM (" + 
 			"        SELECT COUNT(lchii.InventoryItemNumber) as CheckoutCount" + 
 			"        FROM Creator c\r\n" + 
-			"        LEFT JOIN Media_Creator mc on c.Name = mc.CreatorNam" + 
+			"        LEFT JOIN Media_Creator mc on c.Name = mc.CreatorName" + 
 			"        LEFT JOIN Media m on mc.MediaName = m.Name" + 
 			"        LEFT JOIN InventoryItem ii on m.Name = ii.MediaName" + 
 			"        LEFT JOIN LibraryCardHolder_InventoryItem lchii on ii.ItemId = lchii.InventoryItemNumber" + 
@@ -76,8 +76,9 @@ public class DataStorageService {
 	private String INSERT_ORDER = "INSERT INTO [Order] Values (?, ?)";
 	private String INSERT_ORDERITEM = "INSERT INTO [OrderItem] Values (?, ?, ?, ?)";
 	private String UPDATE_ARTIST = "UPDATE Creator SET Name = ? WHERE Name = ?;";
-	private String GET_ALL_ORDERS = "SELECT * FROM [Order];";
+	private String GET_ALL_ORDERS = "SELECT OrderNumber FROM [Order];";
 	private String GET_ORDERITEMS_FOR_ORDER = "SELECT * FROM OrderItem WHERE OrderNumber = ?;";
+	private String ACTIVATE_ORDER_RECEIVED = "INSERT INTO INVENTORYITEM (MediaName, Location) VALUES (?, 'Columbus');";
 	
 	
 	private static DataStorageService service = new DataStorageService();
@@ -370,8 +371,8 @@ public class DataStorageService {
 			ps = conn.prepareStatement(GET_ALL_ORDERS);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				Date eta = new Date(rs.getDate(2).getTime());
-				orders.add(new Order(rs.getInt(1), eta));
+				//Date eta = new Date(rs.getDate(2).getTime());
+				orders.add(new Order(rs.getInt(1), new Date()));
 				System.out.println(rs.getString(1));
 			}
 		} catch (SQLException e) {
