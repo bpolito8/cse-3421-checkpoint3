@@ -21,14 +21,14 @@ public class DataStorageService {
 	private String GET_ARTISTS = "SELECT * FROM Creator";
 	private String GET_TRACKS_FROM_ARTIST_BEFORE_YEAR = "SELECT T.* "
 			+ "FROM TRACK AS T, MEDIA_CREATOR AS MC, MEDIA as M "
-			+ "WHERE M.Year < ? && M.Name = T.MediaName && MC.CreatorName == ? ";
+			+ "WHERE M.Year < ? and M.Name = T.MediaName and MC.CreatorName == ? ";
 	private String GET_ALBUMS_CHECKED_OUT_BY_PATRON = "SELECT Count(*)" + 
-			"FROM LibraryCardHolder L, LibraryCardHolder_InventoryItem LCH, Inventory Item II, Album A "
-			+ "WHERE L.CardNumber == LCH.LibraryCardNumber && LCH.InventoryItem == II.ItemID "
-			+ "&& II.MediaName == A.MediaName && LCH.LibraryCardNumber = ?";
+			"FROM LibraryCardHolder L, LibraryCardHolder_InventoryItem LCH, InventoryItem II, Album A "
+			+ "WHERE L.CardNumber == LCH.LibraryCardNumber and LCH.InventoryItemNumber == II.ItemID "
+			+ "and II.MediaName == A.MediaName and LCH.LibraryCardNumber = ?";
 	private String GET_MAX_CHECKOUT_PATRON = "SELECT FirstName, LastName, Count(*) "
 			+ "FROM LibraryCardHolder as L, LibraryCardHolder_InventoryItem as LCH, Inventory Item as II, Movie as M "
-			+ "WHERE L.CardNumber == LCH.LibraryCardNumber && LCH.InventoryItem == II.ItemID && II.MediaName 	== M.MediaName HAVING Max(M.MediaName) ";
+			+ "WHERE L.CardNumber == LCH.LibraryCardNumber and LCH.InventoryItem == II.ItemID and II.MediaName 	== M.MediaName HAVING Max(M.MediaName) ";
 	private String GET_MOST_POPULAR_ACTOR = "";
 	private String GET_MOST_POPULAR_ARTIST = "";
 	private String INSERT_ARTIST = "INSERT INTO Creator VALUES (?);";
@@ -94,14 +94,18 @@ public class DataStorageService {
 	public List<Track> getTracksByArtistBeforeYear(String artistName, String year){
     	Connection conn = DatabaseManager.initializeDB();
     	List<Track> trackList = new ArrayList<Track>();
-    	ResultSet rs = DatabaseManager.sqlQuerySpecialTypes(conn, GET_TRACKS_FROM_ARTIST_BEFORE_YEAR, 
-    			new String[] {String.valueOf(year), artistName}, 
-    			new DataType[] {DataType.INT, DataType.STRING});
-    	try {
+    	PreparedStatement ps1;
+    	ResultSet rs;
+		try {
+			ps1 = conn.prepareStatement(GET_TRACKS_FROM_ARTIST_BEFORE_YEAR);
+			ps1.setInt(1, Integer.parseInt(year));
+			ps1.setString(2, artistName);
+			rs = ps1.executeQuery();
 			while (rs.next()) {
 				trackList.add(new Track(rs.getString(1), rs.getString(2), rs.getInt(3)));
 				System.out.println(rs.getString(1));
 			}
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -227,7 +231,6 @@ public class DataStorageService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		DatabaseManager.sqlQuery(conn, UPDATE_ARTIST, new String[] {updatedName, originalName});
 	}
 	
 	public void activateItemReceived() {
@@ -239,9 +242,12 @@ public class DataStorageService {
 	public int numAlbumsCheckedOutByPatron(int libraryCardNumber) {
     	Connection conn = DatabaseManager.initializeDB();
     	int numCheckouts = 0;
-    	ResultSet rs = DatabaseManager.sqlQuery(conn, GET_ALBUMS_CHECKED_OUT_BY_PATRON, 
-    			new String[] {String.valueOf(libraryCardNumber)});
+    	PreparedStatement ps;
+    	ResultSet rs;
     	try {
+			ps = conn.prepareStatement(GET_ALBUMS_CHECKED_OUT_BY_PATRON);
+			ps.setInt(1, libraryCardNumber);
+			rs = ps.executeQuery();
 			while (rs.next()) {
 				numCheckouts = rs.getInt(1);
 				System.out.println(rs.getString(1));
@@ -250,6 +256,7 @@ public class DataStorageService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+   
     	return numCheckouts;
 	}
 	
